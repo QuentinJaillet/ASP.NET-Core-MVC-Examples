@@ -1,23 +1,94 @@
 @model IEnumerable<MyWebApp.Models.ProductItemViewModels.ProductItemViewModel>
 
+<div id="modal-placeholder"></div>
+
 <div class="row">
     <div class="col">
-        <table class="table">
-            <thead>
-                <tr>
-                    <th>#</th>
-                    <th>Nom</th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach (var item in Model)
-                {
-                    <tr>
-                        <td>@item.Id</td>
-                        <td>@item.Name</td>
-                    </tr>
-                }
-            </tbody>
-        </table>
+        <button type="button" class="btn btn-primary" data-toggle="ajax-modal" data-target="#add-product" data-url='@Url.Action("Create")'>Add product</button>
     </div>
 </div>
+
+<div class="row">
+    <div class="col">
+        @await Html.PartialAsync("_Products", Model)
+    </div>
+</div>
+
+<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        ...
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary">Save changes</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+
+
+<script type="text/javascript">
+    $().ready(function(){
+        $(".product-edit").on("click", function() { 
+            console.log($(this).data("id"));
+            $('#exampleModal').modal('show');
+
+         });
+
+
+
+        let placeholderElement = $("#modal-placeholder");
+
+        $('button[data-toggle="ajax-modal"]').click(function(event){
+            var url = $(this).data("url");
+
+            $.get(url).done(function(data) { 
+                placeholderElement.html(data);
+                placeholderElement.find(".modal").modal('show')
+
+            });
+         });
+
+         placeholderElement.on('click', '[data-save="modal"]', function (event) {
+            event.preventDefault();
+
+            var form = $(this).parents('.modal').find('form');
+            var actionUrl = form.attr('action');
+            var dataToSend = form.serialize();
+
+            $.post(actionUrl, dataToSend).done(function (data) {
+                var newBody = $('.modal-body', data);
+                placeholderElement.find('.modal-body').replaceWith(newBody);
+
+                // find IsValid input field and check it's value
+                // if it's valid then hide modal window
+                var isValid = newBody.find('[name="IsValid"]').val() == 'True';
+                if (isValid) {    
+
+                    var tableElement = $('#products');
+                    var tableUrl = tableElement.data('url');
+                    $.get(tableUrl).done(function (table) {
+                        tableElement.replaceWith(table);
+                    });    
+
+                    placeholderElement.find('.modal').modal('hide');
+                }
+            });
+        });
+    })
+
+</script>
+
+}

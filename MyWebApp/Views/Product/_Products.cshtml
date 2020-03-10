@@ -1,0 +1,21 @@
+@model IEnumerable<MyWebApp.Models.ProductItemViewModels.ProductItemViewModel>
+
+<table id="products" class="table" data-url='@Url.Action("Index")'>
+<thead>
+    <tr>
+        <th>#</th>
+        <th>Nom</th>
+        <th>Actions</th>
+    </tr>
+</thead>
+<tbody>
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>@item.Id</td>
+            <td>@item.Name</td>
+            <td><a class="product-edit" href="#" data-id="@item.Id">Edit</a></td>
+        </tr>
+    }
+</tbody>
+</table>

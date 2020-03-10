@@ -1,3 +1,5 @@
+using System;
+
 namespace MyWebApp.Models.ProductItemViewModels
 {
     public class ProductItemViewModel
@@ -5,5 +7,9 @@ namespace MyWebApp.Models.ProductItemViewModels
         public int Id { get; set; }
 
         public string Name { get; set; }
+
+        public DateTime LastUpdatedDate { get; set; }
+
+        public DateTime CreationDate { get; set; }
     }
 }
