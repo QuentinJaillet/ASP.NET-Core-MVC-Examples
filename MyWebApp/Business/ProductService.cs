@@ -25,6 +25,11 @@ namespace MyWebApp.Business
             Products.Add(product);
         }
 
+        public Product GetProductById(int id)
+        {
+            return Products.FirstOrDefault(s => s.Id == id);
+        }
+
         public List<Product> GetProducts()
         {
             return Products;

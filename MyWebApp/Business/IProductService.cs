@@ -8,5 +8,7 @@ namespace MyWebApp.Business
         List<Product> GetProducts();
         
         void Create(string name, string description);
+        
+        Product GetProductById(int id);
     }
 }

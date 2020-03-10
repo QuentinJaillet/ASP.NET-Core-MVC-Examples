@@ -44,6 +44,14 @@ namespace MyWebApp.Controllers
             return PartialView("_CreateModal", model);
         }
 
+        [HttpGet]
+        public IActionResult Edit(string id)
+        {
+            var product = _productService.GetProductById(int.Parse(id));
+
+            return PartialView("_EditModal", new EditProductViewModel { Name = product.Name });
+        }
+
         private ProductItemViewModel ConvertToProductItemViewModel(Product product)
         {
             return new ProductItemViewModel

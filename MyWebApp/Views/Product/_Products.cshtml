@@ -14,7 +14,7 @@
         <tr>
             <td>@item.Id</td>
             <td>@item.Name</td>
-            <td><a class="product-edit" href="#" data-id="@item.Id">Edit</a></td>
+            <td><button type="button" class="btn btn-primary" data-toggle="ajax-modal" data-url='@Url.Action("Edit", new { id = @item.Id })'>Edit</button></td>
         </tr>
     }
 </tbody>
